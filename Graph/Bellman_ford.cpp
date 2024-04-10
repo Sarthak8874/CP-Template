@@ -3,11 +3,35 @@
 using namespace std;
 using ll = long long;
 
+void BellmanFord(int n, int src, vector<vector<pair<ll, ll>>> &adj, vector<ll> &dis)
+{
+     dis.assign(n+1,LLONG_MAX);
+    dis[src] = 0;
+    vector<pair<ll, pair<ll, ll>>> e;
+    for (int i = 0; i <= n; i++)
+    {
+        for (auto j : adj[i])
+        {
+            e.push_back({j.second, {i, j.first}});
+        }
+    }
+    for (int i = 0; i < n - 1; i++)
+    {
+        for (auto j : e)
+        {
+            if (dis[j.second.first] == LLONG_MAX)
+            {
+                continue;
+            }
+            dis[j.second.second] = min(dis[j.second.second], dis[j.second.first] + j.first);
+        }
+    }
+}
 int main()
 {
     int n, m;
     cin >> n >> m;
-    vector<vector<pair<int, ll>>> adj(n + 1);
+    vector<vector<pair<ll, ll>>> adj(n + 1);
     for (int i = 0; i < m; i++)
     {
         int u, v;
@@ -18,20 +42,5 @@ int main()
     int src;
     cin >> src;
     vector<ll> dis(n + 1, LLONG_MAX);
-    vector<pair<ll, pair<ll, ll>>> e;
-    for (int i = 0; i < n; i++)
-    {
-        for (auto j : adj[i])
-        {
-            e.push_back({j.second, {i, j.first}});
-        }
-    }
-    dis[src] = 0;
-    for (int i = 0; i < n - 1; i++)
-    {
-        for (auto j : e)
-        {
-            dis[j.second.second] = min(dis[j.second.second], j.first + dis[j.second.first]);
-        }
-    }
+    BellmanFord(n, src, adj, dis);
 }

@@ -82,9 +82,8 @@ int main()
     while (!pq.empty())
     {
         auto f = pq.top();
-        pq.pop();
         ll u = f.second.first, v = f.second.second;
-        char c = 'a';
+        pq.pop();
         ll paru = findpar(u), parv = findpar(v);
         if (paru == parv)
         {

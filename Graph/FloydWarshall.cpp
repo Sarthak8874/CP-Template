@@ -4,23 +4,19 @@ using ll = long long;
 #define all(v) v.begin(), v.end()
 using namespace std;
 
-int main()
+void FloydWarshall(ll n, vector<vector<pair<ll, ll>>> &adj, vector<vector<ll>> &cost)
 {
-    int n, m;
-    cin >> n >> m;
-    vector<vector<pair<int, ll>>> adj(n + 1);
-    vector<vector<ll>> cost(n + 1, vector<ll>(n + 1, INT_MAX));
+    cost.assign(n + 1, vector<ll>(n + 1, LLONG_MAX));
     for (int i = 1; i <= n; i++)
     {
         cost[i][i] = 0;
     }
-    for (int i = 0; i < m; i++)
+    for (int i = 1; i <= n; i++)
     {
-        int u, v;
-        ll d;
-        cin >> u >> v >> d;
-        adj[v].push_back({u, d});
-        cost[u][v] = min(cost[u][v], d);
+        for (auto j : adj[i])
+        {
+            cost[i][j.first] = min(cost[i][j.first], j.second);
+        }
     }
     for (int k = 1; k <= n; k++)
     {
@@ -33,4 +29,12 @@ int main()
             }
         }
     }
+}
+int main()
+{
+    int n, m;
+    cin >> n >> m;
+    vector<vector<pair<ll, ll>>> adj(n + 1);
+    vector<vector<ll>> cost;
+    FloydWarshall(n,adj,cost);
 }
